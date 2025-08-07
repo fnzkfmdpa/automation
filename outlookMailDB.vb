@@ -37,7 +37,7 @@ Function getOngoingRequests(users)
     Dim currentTime As Date
     currentTime = Time
 
-    Set olFolder = olNamespace.Folders(checkAccount.dataFileName).Folders("IOPS_SR접수")
+    Set olFolder = olNamespace.Folders(checkAccount.dataFileName).Folders("[Inbox_Name]")
     Set lastSheet = ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count)
     'SheetName = "completedSht"
 
@@ -84,13 +84,13 @@ Function getOngoingRequests(users)
             Dim bodyText As String
             Dim startPos As Long, endPos As Long
             bodyText = olItem.Body
-            startPos = InStr(bodyText, "SR 카탈로그") + Len("SR 카탈로그")
-            endPos = InStr(startPos, bodyText, "신청자") - 1
+            startPos = InStr(bodyText, "[]") + Len("[]")
+            endPos = InStr(startPos, bodyText, "[]") - 1
             
             If startPos > 0 And endPos > startPos Then
                 xlSheet.Cells(i, 4).value = Trim(Mid(bodyText, startPos, endPos - startPos))
             Else
-                xlSheet.Cells(i, 4).value = "카테고리 없음"
+                xlSheet.Cells(i, 4).value = "No Category"
             End If
         End If
 
@@ -127,7 +127,7 @@ Function getOngoingRequests(users)
     Next i
 
     ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count - 1).Activate
-    Cells.Replace What:="[결재통보] ", Replacement:="", LookAt:=xlPart, _
+    Cells.Replace What:="[] ", Replacement:="", LookAt:=xlPart, _
                      SearchOrder:=xlByRows, MatchCase:=False
 
 
@@ -153,7 +153,7 @@ Function getCompletedRequests()
     Dim currentTime As Date
     currentTime = Time
 
-    Set olFolder = olNamespace.Folders(checkAccount.dataFileName).Folders("IOPS_SR완료")
+    Set olFolder = olNamespace.Folders(checkAccount.dataFileName).Folders("[]")
     Set lastSheet = ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count)
     'SheetName = "completedSht"
 
@@ -200,13 +200,13 @@ Function getCompletedRequests()
             Dim bodyText As String
             Dim startPos As Long, endPos As Long
             bodyText = olItem.Body
-            startPos = InStr(bodyText, "SR 카탈로그") + Len("SR 카탈로그")
-            endPos = InStr(startPos, bodyText, "신청자") - 1
+            startPos = InStr(bodyText, "[]") + Len("[]")
+            endPos = InStr(startPos, bodyText, "[]") - 1
             
             If startPos > 0 And endPos > startPos Then
                 xlSheet.Cells(i, 4).value = Trim(Mid(bodyText, startPos, endPos - startPos))
             Else
-                xlSheet.Cells(i, 4).value = "카테고리 없음"
+                xlSheet.Cells(i, 4).value = "No category"
             End If
         End If
 
