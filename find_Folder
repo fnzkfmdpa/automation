@@ -1,0 +1,49 @@
+Sub FindTodayFile_AMPM()
+    Dim folderPath As String
+    Dim fileName As String
+    Dim fullPath As String
+    Dim targetDate As String
+    Dim found As Boolean
+    
+    On Error GoTo ErrorHandler
+    
+    ' ===== 설정 =====
+    folderPath = "C:\Users\Luka\Documents\TestFolder\" ' ← 루카가 지정할 경로
+    targetDate = Format(Date, "yyyymmdd") ' 오늘 날짜 기준
+    ' =================
+    
+    ' 파일 탐색 시작
+    fileName = Dir(folderPath & "*.*")
+    found = False
+    
+    Do While fileName <> ""
+        ' 파일 이름에 오늘 날짜와 오전/오후 둘 다 있는지 확인
+        If (InStr(fileName, targetDate) > 0) And _
+           ((InStr(fileName, "오전") > 0) Or (InStr(fileName, "오후") > 0)) Then
+           
+           found = True
+           fullPath = folderPath & fileName
+           Exit Do
+        End If
+        fileName = Dir() ' 다음 파일로 이동
+    Loop
+    
+    If found Then
+        ' === 파일을 찾았을 때 실행할 코드 ===
+        MsgBox "파일 발견: " & fullPath, vbInformation, "확인"
+        ' 여기에 다음 실행 코드를 넣으세요
+        ' 예: Call 다음매크로명
+        
+    Else
+        ' === 파일이 없을 때 ===
+        Err.Raise vbObjectError + 1001, "FindTodayFile_AMPM", _
+                  "오늘 날짜(" & targetDate & ") 및 오전/오후 조건을 만족하는 파일이 없습니다."
+    End If
+    
+    Exit Sub
+
+' ===== 에러 핸들러 =====
+ErrorHandler:
+    MsgBox "에러 발생: " & Err.Description, vbCritical, "Error"
+
+End Sub
